@@ -1,6 +1,6 @@
 """
 SmartPark Web - Flask front end for the Modern Parking System
-================================================================
+
 Multimedia University of Kenya - Data Structures & Algorithms
 
 Routes:
