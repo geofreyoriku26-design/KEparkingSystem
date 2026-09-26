@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}SmartPark - Admin{% endblock %}
+
+{% block content %}
+<section class="panels">
+  <div class="panel">
+    <h2>Rate tiers</h2>
+    <p class="hint">Time bands remain fixed. Admin can only adjust the fee amount.</p>
+    <table>
+      <thead><tr><th>Time band</th><th>Current fee (Kshs)</th></tr></thead>
+      <tbody>
+        {% for tier in tiers %}
+        <tr><td>Up to {{ tier.max_minutes }} min</td><td>{{ tier.fee }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <form method="post" action="{{ url_for('update_rate') }}" class="inline-form">
+      <label for="max_minutes">Time band</label>
+      <select id="max_minutes" name="max_minutes">
+        <option value="30">Up to 30 min</option>
+        <option value="120">Up to 120 min</option>
+        <option value="240">Up to 240 min</option>
+        <option value="360">Up to 360 min</option>
+        <option value="inf">Above 360 min</option>
+      </select>
+      <label for="fee">Fee (Kshs)</label>
+      <input id="fee" name="fee" type="number" min="0" step="1" required>
+      <button type="submit">Update fee</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>Reconciliation summary</h2>
+    <ul class="totals">
+      <li><span>Transactions</span><strong>{{ totals.count }}</strong></li>
+      <li><span>Total collected</span><strong>Kshs {{ totals.total_fee }}</strong></li>
+      <li><span>Total VAT (16%)</span><strong>Kshs {{ totals.total_vat }}</strong></li>
+    </ul>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Audit log</h2>
+  <p class="hint">Append-only record of every confirmed payment.</p>
+  <table>
+    <thead>
+      <tr><th>Plate</th><th>Duration</th><th>Fee</th><th>VAT</th><th>Method</th><th>Recorded at</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td class="mono">{{ r.plate }}</td>
+        <td>{{ r.duration_min }} min</td>
+        <td>Kshs {{ r.fee }}</td>
+        <td>Kshs {{ r.vat }}</td>
+        <td>{{ r.method }}</td>
+        <td>{{ r.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6">No transactions recorded yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

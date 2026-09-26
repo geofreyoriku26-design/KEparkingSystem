@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}SmartPark - Gate{% endblock %}
+
+{% block content %}
+<section class="board">
+  <div class="board-count" id="free-count">{{ free_count }}</div>
+  <div class="board-label">bays free out of {{ total_bays }}</div>
+  <div class="board-barrier">Barrier: <span id="barrier-state">{{ barrier_state }}</span></div>
+</section>
+
+<section class="panels">
+  <div class="panel">
+    <h2>Vehicle entry</h2>
+    <p class="hint">Allocates the lowest-numbered free bay and logs the arrival time.</p>
+    <form method="post" action="{{ url_for('entry') }}">
+      <label for="entry-plate">Plate number</label>
+      <input id="entry-plate" name="plate" placeholder="KDA 123A" required autocomplete="off">
+      <button type="submit">Register entry</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>Vehicle exit &amp; payment</h2>
+    <p class="hint">Calculates duration, applies the fee tier, and opens the barrier once payment confirms.</p>
+    <form method="post" action="{{ url_for('exit_vehicle') }}">
+      <label for="exit-plate">Plate number</label>
+      <input id="exit-plate" name="plate" placeholder="KDA 123A" required autocomplete="off">
+
+      <label for="method">Payment method</label>
+      <select id="method" name="method">
+        <option value="MPESA">M-Pesa</option>
+        <option value="CARD">Card</option>
+        <option value="CASH">Cash</option>
+      </select>
+
+      <label for="sim">Simulate stay (minutes, optional)</label>
+      <input id="sim" name="simulated_minutes" type="number" min="0" placeholder="leave blank for real time">
+
+      <button type="submit">Process exit</button>
+    </form>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Bay grid</h2>
+  <div class="bay-grid">
+    {% for bay in bays %}
+      <div class="bay bay-{{ bay.status|lower }}" title="Bay {{ bay.bay_id }} - {{ bay.status }}">{{ bay.bay_id }}</div>
+    {% endfor %}
+  </div>
+  <div class="legend">
+    <span><i class="dot dot-free"></i> Free</span>
+    <span><i class="dot dot-occupied"></i> Occupied</span>
+  </div>
+</section>
+
+{% if active_sessions %}
+<section class="panel">
+  <h2>Vehicles currently parked</h2>
+  <table>
+    <thead><tr><th>Plate</th><th>Bay</th><th>Entry time</th></tr></thead>
+    <tbody>
+      {% for plate, s in active_sessions.items() %}
+      <tr>
+        <td class="mono">{{ plate }}</td>
+        <td>{{ s.bay_id }}</td>
+        <td>{{ s.entry_time.strftime('%H:%M:%S') }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endif %}
+
+<script>
+// Module 8 (Display): poll the live status endpoint and refresh the board
+// without a full page reload.
+async function refreshBoard() {
+  try {
+    const res = await fetch("{{ url_for('api_status') }}");
+    const data = await res.json();
+    document.getElementById('free-count').textContent = data.free;
+    document.getElementById('barrier-state').textContent = data.barrier;
+  } catch (e) { /* network hiccup - try again next interval */ }
+}
+setInterval(refreshBoard, 4000);
+</script>
+{% endblock %}

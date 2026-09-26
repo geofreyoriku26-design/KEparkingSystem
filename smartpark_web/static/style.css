@@ -1,0 +1,175 @@
+:root {
+  --asphalt: #1E2124;
+  --panel-dark: #2A2E32;
+  --paper: #F6F3EC;
+  --ink: #23211D;
+  --amber: #F5A623;
+  --green: #3FA34D;
+  --red: #D64545;
+  --border: #D8D2C2;
+
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Space Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--asphalt);
+  padding: 1rem 1.5rem;
+}
+.topbar .brand {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--amber);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.topbar nav a {
+  color: var(--paper);
+  text-decoration: none;
+  margin-left: 1.25rem;
+  font-weight: 500;
+}
+.topbar nav a:hover { color: var(--amber); }
+
+main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+.board {
+  background: var(--asphalt);
+  color: var(--paper);
+  text-align: center;
+  padding: 2.5rem 1rem;
+  margin-bottom: 1.5rem;
+  border: 3px solid var(--amber);
+}
+.board-count {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 4.5rem;
+  color: var(--amber);
+  line-height: 1;
+}
+.board-label {
+  font-size: 0.95rem;
+  color: #B9B4A8;
+  margin-top: 0.25rem;
+}
+.board-barrier {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+.board-barrier span { color: var(--green); }
+
+.panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 700px) {
+  .panels { grid-template-columns: 1fr; }
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.panel h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+.hint {
+  color: #6b6558;
+  font-size: 0.88rem;
+  margin-top: -0.5rem;
+}
+
+form label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+form input, form select {
+  width: 100%;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--border);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  background: var(--paper);
+}
+form button {
+  margin-top: 1rem;
+  background: var(--amber);
+  color: var(--asphalt);
+  border: none;
+  padding: 0.65rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+form button:hover { background: #e0941a; }
+.inline-form { margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+
+.bay-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(46px, 1fr));
+  gap: 0.4rem;
+  margin: 1rem 0;
+}
+.bay {
+  font-family: var(--font-mono);
+  text-align: center;
+  padding: 0.5rem 0;
+  font-weight: 700;
+  color: #fff;
+}
+.bay-free { background: var(--green); }
+.bay-occupied { background: var(--red); }
+
+.legend { font-size: 0.85rem; color: #6b6558; }
+.legend span { margin-right: 1rem; }
+.dot { display: inline-block; width: 10px; height: 10px; margin-right: 0.3rem; }
+.dot-free { background: var(--green); }
+.dot-occupied { background: var(--red); }
+
+table { width: 100%; border-collapse: collapse; margin-top: 0.75rem; }
+th, td { text-align: left; padding: 0.5rem 0.4rem; border-bottom: 1px solid var(--border); font-size: 0.92rem; }
+th { font-size: 0.78rem; color: #6b6558; font-weight: 600; }
+.mono { font-family: var(--font-mono); }
+
+.totals { list-style: none; padding: 0; margin: 1rem 0 0; }
+.totals li { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+.totals strong { font-family: var(--font-mono); }
+
+.flash-stack { max-width: 900px; margin: 1rem auto 0; padding: 0 1rem; }
+.flash { padding: 0.7rem 1rem; margin-bottom: 0.5rem; border-left: 4px solid; font-size: 0.92rem; }
+.flash-success { background: #EAF6EC; border-color: var(--green); }
+.flash-error { background: #FBEAEA; border-color: var(--red); }
+
+footer {
+  text-align: center;
+  color: #948d7c;
+  font-size: 0.8rem;
+  padding: 1.5rem 0;
+}
